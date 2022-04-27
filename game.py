@@ -29,11 +29,31 @@ class some_obj(pygame.sprite.Sprite):
         self.image = player_img
         self.rect = self.image.get_rect()
         self.rect.center = (400, 120)
+        self.speedx = 0
 
     def update(self):
-        self.rect.x += 10
+        '''
+        #Ушли за левый край
+        if self.rect.right < 0:
+            self.rect.right = window_settings.WIDTH 
+            '''
+
+        self.speedx = 0
+        keystate = pygame.key.get_pressed()
+        if keystate[pygame.K_LEFT]:
+            self.speedx = -8
+
+        if keystate[pygame.K_RIGHT]:
+            self.speedx = 8
+        self.rect.x += self.speedx   
+
+        #Ушли за правый край
         if self.rect.left > window_settings.WIDTH:
             self.rect.right = 0
+
+        if self.rect.right < 0: 
+            self.rect.left = window_settings.WIDTH    
+
 
 
  # настройка папки ассетов
@@ -71,6 +91,11 @@ while game:
         # проверить закрытие окна
         if event.type == pygame.QUIT:
             game = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                rect.speedx = -8
+            if event.key == pygame.K_RIGHT:
+                rect.speedx = 8    
 
     pygame.display.update()
 
